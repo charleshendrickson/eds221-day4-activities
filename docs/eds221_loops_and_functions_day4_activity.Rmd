@@ -1,0 +1,154 @@
+---
+title: "loops_and_functions"
+author: "Charles Hendrickson"
+date: "8/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+#Task 1 
+Write a nested for loop that creates a matrix containing the following:
+
+```{r}
+
+weekdays <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+
+transects <- c("Transect A", "Transect B", "Transect C")
+
+# Need to create a MATRIX to store the outputs in: 
+out_matrix <- matrix(nrow = length(weekdays), ncol = length(transects))
+
+
+# Now, a nested for loop:
+for (i in seq_along(weekdays)) { # Outer loop is the weekdays
+  for (j in seq_along(transects)) { # Inner loop is the transects
+    out_val <- print(paste(weekdays[i], "-", transects[j]))
+    out_matrix[i] <- out_val
+  }
+}
+
+```
+
+#Task 2
+Write a function called force that calculates a force (in Newtons), given inputs of mass (in kg) and acceleration (in ms2 (recall: F=ma), and returns a statement “The resulting force is ___ Newtons.”
+
+```{r}
+force <- function(mass_kg, acceleration_ms2) {
+  print(paste("The resulting force is", mass_kg * acceleration_ms2, "Newtons"))
+}
+
+force(mass_kg = 2, acceleration_ms2 = 2)
+```
+
+#Task 3
+Write a function called name_column that, given a data frame name and a number, will return the column name associated with that column number. Add an error message if the column number is < 1, or if the number exceeds the number of columns in the data frame. Test the function using the mtcars data frame.
+
+```{r}
+name_column <- function(df_name, num) {
+    if (num >= 1) {
+    return(colnames(df_name[num]))
+} else if (num < 1 | num > ncol(df_name) ) {
+  stop("Column number must be greater than 1 or the number exceeds the number of columns in the data frame.")}
+}
+
+name_column(mtcars, 1)
+```
+
+# Task 3 Part 2
+W=aLb, where where L is total fish length (centimeters), W is the expected fish weight (grams), and a and b are species-dependent parameter values 
+
+Recreate the table above as a data frame stored as fish_parms. Then, write a function called fish_weight that allows a user to only enter the common name (argument fish_name) and total length (argument tot_length) (in centimeters) of a fish, to return the expected fish weight in grams. Test it out for different species and lengths.
+
+Now, try creating a vector of lengths (e.g. 0 to 100, by increments of 1) and ensuring that your function will calculate the fish weight over a range of lengths for the given species (try this for milkfish, storing the output weights as milkfish_weights.
+```{r}
+# My function
+fish_weight <- function(fish_name, length_cm) {
+
+# Data frame:
+fish_parms <- data.frame(sci_name = c("Chanos chanos", "Sphyraena barracuda", "Caranx ignobilis"), 
+                         common_name = c("Milkfish", "Great barracuda", "Giant trevally"), 
+                         a_est = c(0.0905, 0.0181, 0.0353),
+                         b_est = c(2.52, 3.27, 3.05))
+
+
+# Telling R which "common_name" to look for 
+fish_choice <- dplyr::filter(.data = fish_parms, common_name == fish_name)
+
+
+# Value that my function will return
+weight_g <- fish_choice$a_est * length_cm ^ fish_choice$b_est
+
+# What you want to return back to the user
+return(weight_g)
+}
+
+
+fish_weight("Great barracuda", 3)
+```
+
+# Task 4
+
+```{r}
+wave_power <- function(height, period) {
+ power <- return((0.5 * height ^ 2)* period)
+}
+
+seq_wave_height <- seq(from = 0,to = 3, by = 0.2)
+
+wave_power(seq_wave_height, 8)
+
+```
+
+# Task #5
+```{r}
+final_wave_power <- function(height, period, water_depth) {
+  if (water_depth > 12) {
+    message("Depths greater than 12m use shallow_wave_power.")
+      power <- (0.5 * height ^ 2)* period
+    
+} else if (water_depth <= 12) { 
+      power <- (0.81 * height ^ 2)* period
+      message("Depths less than or equal to 12m use shallow_wave_power.")
+  }
+  return(power)
+}
+
+final_wave_power(5, 2, 8)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
